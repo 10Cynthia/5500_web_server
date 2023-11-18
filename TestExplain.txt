@@ -1,0 +1,35 @@
+1. **Login/Logout Tests:**
+
+   a. **Log in with correct credentials:**
+      - Description: Tests if a user can log in with the correct username and password.
+      - Test Steps:
+        1. Send a POST request to the '/login' route with valid credentials.
+      - Expected Result: The server should respond with a redirect status code (302), indicating successful login.
+
+   b. **Log in with incorrect credentials:**
+      - Description: Tests if a user receives an error message for login with incorrect credentials.
+      - Test Steps:
+        1. Send a POST request to the '/login' route with invalid credentials.
+      - Expected Result: The server should respond with a redirect status code (302) and display an error message indicating incorrect username or password.
+
+   c. **Log out:**
+      - Description: Tests if a user can successfully log out.
+      - Test Steps:
+        1. Send a GET request to the '/logout' route.
+      - Expected Result: The server should respond with a redirect status code (302), indicating successful logout.
+
+2. **User Profile Tests:**
+
+   a. **View user profile page:**
+      - Description: Tests if a user can view their profile page.
+      - Test Steps:
+        1. Send a GET request to the '/profile/user1' route (replace 'user1' with a valid username).
+      - Expected Result: The server should respond with a success status code (200), and the response text should contain 'User Profile'.
+
+   b. **Follow other users:**
+      - Description: Tests if a user can follow another user.
+      - Test Steps:
+        1. Send a POST request to the '/follow/user2' route (replace 'user2' with a valid username to follow).
+      - Expected Result: The server should respond with a redirect status code (302), and the response text should contain 'You are now following user2'.
+
+These tests cover basic scenarios for login/logout and user profile functionality.
