@@ -1,7 +1,7 @@
-const chai = require('chai');
+import chai from 'chai';
 const expect = chai.expect;
-const supertest = require('supertest');
-const app = require('./app'); // Assuming your app is in a file named app.js
+import supertest from 'supertest';
+import app from './app.js'; // Assuming your app is in a file named app.js
 
 describe('YouTube-like Web Application', () => {
     let agent; // To persist the session across requests
@@ -69,4 +69,75 @@ describe('YouTube-like Web Application', () => {
                 });
         });
     });
+
+    describe('Video Comment Functionality', () => {
+        let agent; // To persist the session across requests
+    
+        before((done) => {
+            // Log in before running the tests
+            supertest(app)
+                .post('/login')
+                .send({ username: 'user1', password: 'password1' })
+                .expect(302) // Redirect on successful login
+                .end((err, res) => {
+                    if (err) return done(err);
+                    agent = supertest.agent(app); // Persist the session
+                    done();
+                });
+        });
+    
+        after((done) => {
+            // Log out after running the tests
+            agent
+                .get('/logout')
+                .expect(302) // Redirect on logout
+                .end((err, res) => {
+                    if (err) return done(err);
+                    done();
+                });
+        });
+    
+        it('should allow a user to add a video comment', (done) => {
+            const videoID = 'testVideoID';
+            const newVideoComment = { /* Define your new comment data */ };
+    
+            agent
+                .post(`/api/videos/${videoID}/addcomment`)
+                .send(newVideoComment)
+                .expect(200)
+                .end((err, res) => {
+                    if (err) return done(err);
+                    expect(res.text).to.contain(/* Add assertions based on your application's behavior */);
+                    done();
+                });
+        });
+    
+        it('should allow a user to update their video comment', (done) => {
+            const cid = 'testCommentID';
+            const updatedVideoComment = { /* Define your updated comment data */ };
+    
+            agent
+                .put(`/api/videos/updatecomment/${cid}`)
+                .send(updatedVideoComment)
+                .expect(200)
+                .end((err, res) => {
+                    if (err) return done(err);
+                    expect(res.text).to.contain(/* Add assertions based on your application's behavior */);
+                    done();
+                });
+        });
+    
+        it('should allow a user to delete their video comment', (done) => {
+            const cid = 'testCommentID';
+    
+            agent
+                .delete(`/api/videos/deletecomment/${cid}`)
+                .expect(200)
+                .end((err, res) => {
+                    if (err) return done(err);
+                    expect(res.text).to.contain(/* Add assertions based on your application's behavior */);
+                    done();
+                });
+        });
+    });   
 });
